@@ -1,0 +1,48 @@
+---
+interface Props {
+  primary: string;
+  secondary: string;
+  id?: string;
+  theme?: 'light' | 'dark';
+}
+const { primary, secondary, id, theme = 'light' } = Astro.props;
+---
+
+<!-- Un solo encabezado semántico; cada frase conserva su jerarquía visual.
+     Usar theme="dark" sobre fondos oscuros para mantener el contraste. -->
+<h2
+  id={id}
+  class:list={['section-title', { 'section-title--inverse': theme === 'dark' }]}
+>
+  <span>{primary}</span>
+  <span class="section-title-secondary">{secondary}</span>
+</h2>
+
+<style>
+  .section-title {
+    color: var(--ink);
+    font-family: var(--display);
+    font-size: clamp(2rem, 3.1vw, 3rem);
+    font-weight: 750;
+    line-height: 1.18;
+    letter-spacing: -0.045em;
+    text-transform: none;
+  }
+  .section-title > span {
+    display: block;
+  }
+  .section-title-secondary {
+    color: #8590a5;
+  }
+  .section-title--inverse {
+    color: var(--white);
+  }
+  .section-title--inverse .section-title-secondary {
+    color: #bac6dc;
+  }
+  @media (max-width: 767px) {
+    .section-title {
+      font-size: clamp(1.9rem, 7vw, 2.2rem);
+    }
+  }
+</style>

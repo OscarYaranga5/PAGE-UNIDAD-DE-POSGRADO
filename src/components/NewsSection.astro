@@ -1,6 +1,7 @@
 ---
 import NewsCards from './NewsCards.astro';
 import Icon from './Icon.astro';
+import SectionTitle from './SectionTitle.astro';
 import { news } from '../data/news';
 ---
 
@@ -11,8 +12,11 @@ import { news } from '../data/news';
 >
   <div class="container">
     <header class="news-heading">
-      <span>NUESTRAS</span>
-      <h2 id="news-title">Últimas noticias</h2>
+      <SectionTitle
+        id="news-title"
+        primary="Últimas noticias."
+        secondary="Conocimiento que conecta."
+      />
     </header>
     <NewsCards items={news.slice(0, 3)} />
     <a class="news-all" href="/noticias/">
@@ -26,27 +30,7 @@ import { news } from '../data/news';
     background: var(--white);
   }
   .news-heading {
-    color: var(--blue);
     margin-bottom: 46px;
-  }
-  .news-heading > span {
-    display: block;
-    font-family: var(--display);
-    font-size: 1.1rem;
-    letter-spacing: 0.06em;
-    margin-bottom: 6px;
-  }
-  .news-heading h2 {
-    font-size: clamp(2rem, 3.2vw, 3rem);
-    text-transform: uppercase;
-  }
-  .news-heading h2::after {
-    content: '';
-    display: block;
-    width: 110px;
-    height: 3px;
-    background: var(--blue);
-    margin-top: 15px;
   }
   .news-all {
     display: flex;
