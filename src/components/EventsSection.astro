@@ -1,0 +1,526 @@
+---
+import Icon from './Icon.astro';
+import { events } from '../data/events';
+
+const monthLabel = (date: string) =>
+  new Intl.DateTimeFormat('es-PE', {
+    month: 'long',
+    timeZone: 'UTC',
+  }).format(new Date(`${date}T00:00:00Z`));
+---
+
+<section
+  class="events-carousel"
+  id="eventos"
+  aria-labelledby="events-title"
+  aria-roledescription="carrusel"
+  data-events-carousel
+>
+  <div class="container">
+    <header class="events-heading">
+      <h2 id="events-title">
+        Próximos <span>eventos.</span>
+      </h2>
+      <p>Nuevas fechas por anunciar</p>
+    </header>
+    <div class="events-stage">
+      <button
+        class="carousel-arrow carousel-arrow--previous"
+        type="button"
+        aria-label="Mostrar eventos anteriores"
+        aria-controls="events-track"
+        data-previous
+        hidden
+        disabled
+      >
+        <Icon size={22} />
+      </button>
+      <div
+        class="events-track"
+        id="events-track"
+        tabindex="0"
+        role="group"
+        aria-label="Eventos. Desliza horizontalmente o usa las flechas del teclado."
+        data-track
+      >
+        {events.map((event, index) => (
+          <article
+            class:list={['event-slide', `event-slide--${index % 3}`]}
+            role="group"
+            aria-roledescription="diapositiva"
+            aria-label={`${index + 1} de ${events.length}: ${event.category}`}
+            data-slide
+          >
+            <div class="event-date">
+              {event.date ? (
+                <time datetime={event.date}>
+                  <span class="event-month">{monthLabel(event.date)}</span>
+                  <strong class="event-day">{event.date.slice(8, 10)}</strong>
+                  <span class="event-date-caption">
+                    {event.date.slice(0, 4)}
+                  </span>
+                </time>
+              ) : (
+                <div aria-label="Fecha por confirmar">
+                  <span class="event-month">Fecha</span>
+                  <strong class="event-day" aria-hidden="true">
+                    —
+                  </strong>
+                  <span class="event-date-caption">Por confirmar</span>
+                </div>
+              )}
+            </div>
+            <div class="event-copy">
+              <span class="event-category">{event.category}</span>
+              <h3>{event.title}</h3>
+              <p>{event.description}</p>
+              {event.href && (
+                <a href={event.href}>
+                  Ver evento <Icon size={15} />
+                  <span class="sr-only">: {event.title}</span>
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+      <button
+        class="carousel-arrow"
+        type="button"
+        aria-label="Mostrar siguientes eventos"
+        aria-controls="events-track"
+        data-next
+        hidden
+      >
+        <Icon size={22} />
+      </button>
+    </div>
+    <div class="events-footer">
+      <span>La programación se publicará aquí.</span>
+      <div class="carousel-progress" aria-hidden="true" hidden data-progress>
+        <span data-progress-fill></span>
+      </div>
+      <p
+        class="sr-only"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        data-status
+      ></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Scroll nativo + snap: funciona con touch y trackpad, incluso sin JavaScript.
+  // No hay avance automático que interrumpa la lectura o el foco del teclado.
+  document
+    .querySelectorAll<HTMLElement>('[data-events-carousel]')
+    .forEach((root) => {
+      const track = root.querySelector<HTMLElement>('[data-track]');
+      const previous = root.querySelector<HTMLButtonElement>('[data-previous]');
+      const next = root.querySelector<HTMLButtonElement>('[data-next]');
+      const progress = root.querySelector<HTMLElement>('[data-progress]');
+      const fill = root.querySelector<HTMLElement>('[data-progress-fill]');
+      const status = root.querySelector<HTMLElement>('[data-status]');
+      const slides = Array.from(
+        root.querySelectorAll<HTMLElement>('[data-slide]'),
+      );
+      if (
+        !track ||
+        !previous ||
+        !next ||
+        !progress ||
+        !fill ||
+        !status ||
+        !slides.length
+      )
+        return;
+
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      const maxScroll = () =>
+        Math.max(0, track.scrollWidth - track.clientWidth);
+      const step = () =>
+        slides.length > 1
+          ? slides[1].offsetLeft - slides[0].offsetLeft
+          : track.clientWidth;
+
+      const update = () => {
+        const max = maxScroll();
+        const position = Math.max(0, Math.min(track.scrollLeft, max));
+        previous.disabled = position <= 2;
+        next.disabled = max - position <= 2;
+        const visibleFraction = Math.min(
+          1,
+          track.clientWidth / track.scrollWidth,
+        );
+        fill.style.width = `${visibleFraction * 100}%`;
+        fill.style.left = `${max ? (position / max) * (1 - visibleFraction) * 100 : 0}%`;
+      };
+
+      const announce = () => {
+        const bounds = track.getBoundingClientRect();
+        const visible = slides.flatMap((slide, index) => {
+          const rect = slide.getBoundingClientRect();
+          const overlap =
+            Math.min(rect.right, bounds.right) -
+            Math.max(rect.left, bounds.left);
+          return overlap >= rect.width * 0.5 ? [index + 1] : [];
+        });
+        if (visible.length) {
+          status.textContent =
+            visible.length === 1
+              ? `Evento ${visible[0]} de ${slides.length}.`
+              : `Eventos ${visible[0]} a ${visible[visible.length - 1]} de ${slides.length}.`;
+        }
+      };
+
+      let destination = track.scrollLeft;
+      const goTo = (position: number) => {
+        destination = Math.max(0, Math.min(position, maxScroll()));
+        track.scrollTo({
+          left: destination,
+          behavior: reducedMotion.matches ? 'instant' : 'smooth',
+        });
+      };
+      previous.addEventListener('click', () => goTo(destination - step()));
+      next.addEventListener('click', () => goTo(destination + step()));
+      track.addEventListener('keydown', (event) => {
+        // No captura flechas cuando el foco está en un enlace del evento.
+        if (event.target !== track) return;
+        if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          goTo(track.scrollLeft + step());
+        }
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          goTo(track.scrollLeft - step());
+        }
+        if (event.key === 'Home') {
+          event.preventDefault();
+          goTo(0);
+        }
+        if (event.key === 'End') {
+          event.preventDefault();
+          goTo(maxScroll());
+        }
+      });
+
+      let frame = 0;
+      let settleTimer: ReturnType<typeof setTimeout>;
+      track.addEventListener(
+        'scroll',
+        () => {
+          if (!frame)
+            frame = requestAnimationFrame(() => {
+              update();
+              frame = 0;
+            });
+          // También cubre navegadores sin el evento scrollend.
+          clearTimeout(settleTimer);
+          settleTimer = setTimeout(() => {
+            destination = track.scrollLeft;
+            announce();
+          }, 160);
+        },
+        { passive: true },
+      );
+      const syncPosition = () => {
+        destination = track.scrollLeft;
+      };
+      track.addEventListener('pointerdown', syncPosition, { passive: true });
+      track.addEventListener('wheel', syncPosition, { passive: true });
+
+      previous.hidden = false;
+      next.hidden = false;
+      progress.hidden = false;
+      root.classList.add('is-enhanced');
+      new ResizeObserver(() => {
+        destination = track.scrollLeft;
+        update();
+      }).observe(track);
+      update();
+    });
+</script>
+
+<style>
+  .events-carousel {
+    background: var(--white);
+    padding-block: 30px 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .events-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 22px;
+  }
+  .events-heading h2 {
+    font-size: clamp(1.3rem, 2vw, 1.7rem);
+    letter-spacing: -0.035em;
+    color: var(--ink);
+  }
+  .events-heading h2 span {
+    color: #8590a5;
+  }
+  .events-heading p {
+    font-size: 0.73rem;
+  }
+  .events-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: 15px;
+  }
+  .is-enhanced .events-stage {
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+  }
+  .events-track {
+    position: relative;
+    display: flex;
+    gap: 22px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #b7c6e9 transparent;
+    padding-block: 5px 12px;
+  }
+  .is-enhanced .events-track {
+    scrollbar-width: none;
+  }
+  .is-enhanced .events-track::-webkit-scrollbar {
+    display: none;
+  }
+  .events-track:focus-visible {
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .event-slide {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    flex: 0 0 calc((100% - 44px) / 2.15);
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    min-height: 160px;
+    padding: 24px;
+    border-radius: 10px;
+    background: var(--navy);
+    color: white;
+    scroll-snap-align: start;
+  }
+  .event-slide--1 {
+    background: var(--blue);
+  }
+  .event-slide--2 {
+    background: #284971;
+  }
+  .event-slide::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    right: -50px;
+    top: -75px;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #ffffff16;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .event-date {
+    flex: 0 0 100px;
+    padding-right: 22px;
+    border-right: 1px solid #ffffff66;
+    text-align: center;
+  }
+  .event-month {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 650;
+    text-transform: capitalize;
+    line-height: 1.3;
+  }
+  .event-day {
+    display: block;
+    font-family: var(--display);
+    font-size: 2.8rem;
+    line-height: 1.1;
+    font-weight: 750;
+    letter-spacing: -0.05em;
+  }
+  .event-date-caption {
+    display: block;
+    font-size: 0.6rem;
+    color: #e1e8f5;
+    line-height: 1.5;
+    margin-top: 5px;
+  }
+  .event-copy {
+    min-width: 0;
+  }
+  .event-category {
+    display: block;
+    color: #e1e8f5;
+    font-size: 0.57rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .event-copy h3 {
+    font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+  }
+  .event-copy p {
+    color: #e1e8f5;
+    font-size: 0.73rem;
+    line-height: 1.55;
+    margin-top: 7px;
+  }
+  .event-copy a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.73rem;
+    margin-top: 10px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .carousel-arrow {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--navy);
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      background 0.2s,
+      transform 0.2s;
+  }
+  .carousel-arrow--previous :global(svg) {
+    transform: rotate(180deg);
+  }
+  .carousel-arrow:hover:not(:disabled) {
+    color: var(--blue);
+    background: var(--soft);
+    transform: scale(1.08);
+  }
+  .carousel-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .events-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding-inline: 53px;
+    margin-top: 6px;
+  }
+  .events-footer > span {
+    font-size: 0.66rem;
+    color: var(--muted);
+  }
+  .carousel-progress {
+    position: relative;
+    width: 100px;
+    height: 3px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 5px;
+    background: var(--line);
+  }
+  .carousel-progress > span {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    width: 33%;
+    border-radius: inherit;
+    background: var(--blue);
+  }
+  @media (max-width: 1099px) {
+    .event-slide {
+      flex-basis: 72%;
+    }
+  }
+  @media (max-width: 767px) {
+    .events-carousel {
+      padding-block: 23px 25px;
+    }
+    .events-heading {
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 15px;
+    }
+    .events-heading p {
+      font-size: 0.65rem;
+    }
+    .is-enhanced .events-stage {
+      grid-template-columns: minmax(0, 1fr) 40px 40px;
+      gap: 10px;
+    }
+    .events-track {
+      grid-row: 1;
+      grid-column: 1 / -1;
+      gap: 14px;
+      padding-bottom: 5px;
+    }
+    .event-slide {
+      flex-basis: 92%;
+      padding: 22px 17px;
+      gap: 15px;
+      min-height: 155px;
+    }
+    .event-date {
+      flex-basis: 76px;
+      padding-right: 15px;
+    }
+    .event-month {
+      font-size: 0.75rem;
+    }
+    .event-day {
+      font-size: 2.4rem;
+    }
+    .event-copy h3 {
+      font-size: 1.18rem;
+    }
+    .event-copy p {
+      font-size: 0.68rem;
+    }
+    .event-category {
+      font-size: 0.53rem;
+    }
+    .carousel-arrow {
+      grid-row: 2;
+      grid-column: 3;
+      border-color: var(--line);
+      width: 38px;
+      height: 38px;
+    }
+    .carousel-arrow--previous {
+      grid-column: 2;
+    }
+    .events-footer {
+      padding-inline: 0;
+      margin-top: 10px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .carousel-arrow {
+      transition: none;
+    }
+    .events-track {
+      scroll-behavior: auto;
+    }
+  }
+</style>

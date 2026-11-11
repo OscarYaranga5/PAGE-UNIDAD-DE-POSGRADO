@@ -33,6 +33,10 @@ Cada tarjeta utiliza un único enlace nativo que cubre su superficie completa. E
 
 ## Contenido e identidad
 
+El carrusel de próximos eventos aparece inmediatamente después del hero, en lugar de la antigua franja azul. `src/components/EventsSection.astro` implementa el desplazamiento horizontal con flechas, teclado, gestos táctiles y ajuste a cada tarjeta. Respeta la preferencia de movimiento reducido y no avanza automáticamente. Sin JavaScript conserva el desplazamiento nativo.
+
+`src/data/events.ts` contiene tres reservas «Próximamente», sin fechas inventadas ni enlaces de inscripción. Para incorporar un evento confirmado, actualizar su título, descripción y fecha ISO `YYYY-MM-DD`; añadir `href` únicamente cuando exista una página real de destino.
+
 La sección de Noticias reemplaza el bloque de pasos de admisión en la portada. `src/data/news.ts` centraliza publicaciones, imágenes y fechas. `NewsSection.astro` presenta las tres primeras; `NewsCards.astro` comparte las tarjetas con `/noticias/`. Las páginas `/noticias/[slug]/` se generan automáticamente.
 
 Las tres publicaciones iniciales son contenido de muestra, identificado en tarjetas y artículos. Para publicar noticias reales, sustituir textos e imágenes, completar `publishedAt` en formato `YYYY-MM-DD` y cambiar `isDemo` a `false` después de su aprobación. Los pasos para postular siguen disponibles en `/admision/`.

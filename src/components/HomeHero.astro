@@ -31,10 +31,10 @@ const highlights = [
   <div class="hero-scene">
     <img
       class="scene-photo"
-      src="/images/comunidad.webp"
-      alt="Profesionales compartiendo ideas en un espacio de estudio; fotografía referencial"
-      width="1600"
-      height="1067"
+      src="/images/hero-posgrado.webp"
+      alt="Tres graduados con toga y birrete celebrando en un campus universitario; fotografía referencial"
+      width="1920"
+      height="1280"
       fetchpriority="high"
     />
     <div class="scene-overlay" aria-hidden="true"></div>
@@ -48,7 +48,7 @@ const highlights = [
           <br />
           liderar lo que
           <br />
-          <em>sigue.</em>
+          <span class="scene-title-accent">sigue.</span>
         </h1>
         <p class="scene-description">
           Tu experiencia merece un nuevo horizonte. Conecta el conocimiento con
@@ -62,13 +62,6 @@ const highlights = [
             <Icon name="book" size={19} /> Conoce Posgrado UNDC
           </a>
         </div>
-      </div>
-      <div class="scene-signature" aria-hidden="true">
-        Tu propósito.
-        <br />
-        Tu futuro.
-        <br />
-        <strong>Tu siguiente paso.</strong>
       </div>
       <span class="scene-reference">Imagen referencial</span>
     </div>
@@ -108,11 +101,11 @@ const highlights = [
   .scene-photo {
     position: absolute;
     z-index: -2;
-    inset: 0;
-    width: 100%;
+    inset: 0 0 0 auto;
+    width: 75%;
     height: 100%;
     object-fit: cover;
-    object-position: center 45%;
+    object-position: center 70%;
   }
   .scene-overlay {
     position: absolute;
@@ -121,10 +114,11 @@ const highlights = [
     background:
       linear-gradient(
         90deg,
-        rgba(16, 35, 74, 0.98) 0%,
-        rgba(16, 35, 74, 0.91) 30%,
-        rgba(16, 35, 74, 0.48) 57%,
-        rgba(16, 35, 74, 0.06) 100%
+        var(--navy) 0%,
+        rgba(16, 35, 74, 0.98) 27%,
+        rgba(16, 35, 74, 0.82) 42%,
+        rgba(16, 35, 74, 0.12) 68%,
+        rgba(16, 35, 74, 0.02) 100%
       ),
       linear-gradient(0deg, rgba(16, 35, 74, 0.65), transparent 40%);
   }
@@ -136,7 +130,7 @@ const highlights = [
     padding-block: 70px 110px;
   }
   .scene-copy {
-    max-width: 620px;
+    max-width: 52%;
   }
   .scene-kicker {
     color: #d8e1f3;
@@ -151,16 +145,15 @@ const highlights = [
   }
   .scene-copy h1 {
     color: var(--white);
-    font-size: clamp(3.5rem, 5.2vw, 5rem);
-    line-height: 1.07;
-    letter-spacing: -0.055em;
+    font-size: clamp(3rem, 4.8vw, 4.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
     font-weight: 750;
   }
-  .scene-copy h1 em {
+  .scene-title-accent {
     display: inline-block;
     color: #9bbaff;
-    font-weight: 550;
-    letter-spacing: -0.06em;
+    font-weight: 750;
   }
   .scene-description {
     max-width: 440px;
@@ -204,22 +197,6 @@ const highlights = [
   }
   .scene-actions a:focus-visible {
     outline-color: white;
-  }
-  .scene-signature {
-    position: absolute;
-    right: 15px;
-    bottom: 125px;
-    transform: rotate(-6deg);
-    color: white;
-    font-family: var(--display);
-    font-size: clamp(1.2rem, 2vw, 1.8rem);
-    font-style: italic;
-    line-height: 1.4;
-    letter-spacing: -0.04em;
-    text-shadow: 0 2px 14px #10234a;
-  }
-  .scene-signature strong {
-    font-weight: 700;
   }
   .scene-reference {
     position: absolute;
@@ -283,9 +260,6 @@ const highlights = [
     line-height: 1.5;
   }
   @media (max-width: 1099px) {
-    .scene-signature {
-      display: none;
-    }
     .hero-highlights ul {
       padding-inline: 10px;
     }
@@ -302,20 +276,27 @@ const highlights = [
     }
   }
   @media (max-width: 767px) {
+    /* En móvil la foto ocupa una cabecera propia: evita superponer el
+       titular a los rostros y mantiene legibles los botones sin oscurecerla. */
     .scene-content {
-      min-height: 615px;
-      padding-block: 55px 100px;
+      min-height: 0;
+      padding-block: 305px 100px;
     }
     .scene-photo {
-      object-position: 65% center;
+      width: 100%;
+      height: 350px;
+      object-position: center 60%;
     }
     .scene-overlay {
-      background:
-        linear-gradient(90deg, rgba(16, 35, 74, 0.94), rgba(16, 35, 74, 0.65)),
-        linear-gradient(0deg, rgba(16, 35, 74, 0.55), transparent);
+      background: linear-gradient(
+        180deg,
+        rgba(16, 35, 74, 0.02) 0px,
+        rgba(16, 35, 74, 0.08) 190px,
+        var(--navy) 340px
+      );
     }
     .scene-copy {
-      max-width: 520px;
+      max-width: 100%;
     }
     .scene-copy h1 {
       font-size: clamp(2.8rem, 9.8vw, 4.3rem);
@@ -342,7 +323,8 @@ const highlights = [
       min-height: 50px;
     }
     .scene-reference {
-      bottom: 56px;
+      top: 20px;
+      bottom: auto;
     }
     .hero-highlights ul {
       grid-template-columns: repeat(2, minmax(0, 1fr));

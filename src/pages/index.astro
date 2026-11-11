@@ -8,23 +8,12 @@ import DiscoverCards from '../components/DiscoverCards.astro';
 import HomeHero from '../components/HomeHero.astro';
 import NewsSection from '../components/NewsSection.astro';
 import SectionTitle from '../components/SectionTitle.astro';
+import EventsSection from '../components/EventsSection.astro';
 ---
 
 <BaseLayout>
   <HomeHero />
-  <div class="value-strip">
-    <div class="container value-strip-inner">
-      <span>
-        <Icon name="book" /> Maestrías y doctorado
-      </span>
-      <span>
-        <Icon name="spark" /> Investigación con propósito
-      </span>
-      <span>
-        <Icon name="globe" /> Desde Cañete, hacia el futuro
-      </span>
-    </div>
-  </div>
+  <EventsSection />
 
   <section class="section" id="programas">
     <div class="container">
@@ -60,40 +49,6 @@ import SectionTitle from '../components/SectionTitle.astro';
   <DiscoverCards />
 
   <NewsSection />
-
-  <section class="section community-section">
-    <div class="container community-grid">
-      <div>
-        <span class="eyebrow">CONECTA CON POSGRADO</span>
-        <SectionTitle
-          primary="La comunidad"
-          secondary="sigue creciendo."
-          theme="dark"
-        />
-        <p>
-          Información académica, actividades y recursos para acompañar tu
-          siguiente etapa.
-        </p>
-        <a class="text-link" href="https://posgrado.undc.edu.pe/">
-          Visita el portal institucional <Icon name="diagonal" />
-        </a>
-      </div>
-      <div class="resource-list">
-        <a href="/admision/">
-          <span class="resource-type">ADMISIÓN</span>
-          <h3>Todo comienza con una buena decisión.</h3>
-          <span>Conoce la ruta para postular</span>
-          <Icon name="diagonal" size={26} />
-        </a>
-        <a href="https://aulaposgrado.undc.edu.pe/">
-          <span class="resource-type">COMUNIDAD ACADÉMICA</span>
-          <h3>Tu espacio para seguir aprendiendo.</h3>
-          <span>Accede al aula virtual</span>
-          <Icon name="diagonal" size={26} />
-        </a>
-      </div>
-    </div>
-  </section>
 
   <section class="section">
     <div class="container faq-grid">
