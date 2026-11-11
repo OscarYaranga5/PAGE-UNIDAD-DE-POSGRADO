@@ -1,0 +1,13 @@
+---
+import Icon from './Icon.astro';
+import type { Program } from '../data/programs';
+interface Props { program: Program; index?: number }
+const { program, index = 0 } = Astro.props;
+---
+<article class="program-card" data-program data-type={program.type}>
+  <a class="program-image" href={`/programas/${program.slug}/`} tabindex="-1" aria-hidden="true">
+    <img src={program.image} alt="" width="900" height="600" loading="lazy" decoding="async" />
+    <span class="program-badge">{program.type}</span><span class="program-number">0{index + 1}</span>
+  </a>
+  <div class="program-body"><span class="eyebrow">{program.area}</span><h3><a href={`/programas/${program.slug}/`}>{program.title}</a></h3><p>{program.description}</p><div class="program-meta"><span>{program.semesters} semestres</span><span>Presencial</span></div><a href={`/programas/${program.slug}/`} class="text-link">Explorar programa <span class="sr-only">{program.title}</span><Icon /></a></div>
+</article>

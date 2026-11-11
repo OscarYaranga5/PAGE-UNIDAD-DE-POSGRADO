@@ -1,0 +1,182 @@
+---
+import Icon from './Icon.astro';
+import { formatNewsDate, type NewsItem } from '../data/news';
+interface Props {
+  items: NewsItem[];
+}
+const { items } = Astro.props;
+---
+
+<div class="news-grid">
+  {items.map((item) => (
+    <article class="news-card">
+      <a
+        class="news-image"
+        href={`/noticias/${item.slug}/`}
+        tabindex="-1"
+        aria-hidden="true"
+      >
+        <img
+          src={item.image}
+          alt=""
+          width="900"
+          height="600"
+          loading="lazy"
+          decoding="async"
+        />
+        {item.isDemo && <span class="demo-badge">Contenido de muestra</span>}
+      </a>
+      <div class="news-body">
+        <h3>
+          <a href={`/noticias/${item.slug}/`}>{item.title}</a>
+        </h3>
+        <div class="news-meta">
+          <p>
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <path d="M4 5h16v16H4zM8 2v6m8-6v6M4 10h16m-12 4h2m4 0h2m-8 3h2m4 0h2" />
+            </svg>
+            {item.publishedAt ? (
+              <time datetime={item.publishedAt}>
+                {formatNewsDate(item.publishedAt)}
+              </time>
+            ) : (
+              <span>Pendiente de publicación</span>
+            )}
+          </p>
+          <p>
+            <Icon name="book" size={17} />
+            <span>{item.category}</span>
+          </p>
+        </div>
+        <p class="news-excerpt">{item.excerpt}</p>
+        <a class="news-more" href={`/noticias/${item.slug}/`}>
+          Más información <Icon size={17} />
+          <span class="sr-only">sobre {item.title}</span>
+        </a>
+      </div>
+    </article>
+  ))}
+</div>
+
+<style>
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px;
+  }
+  .news-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .news-image {
+    position: relative;
+    display: block;
+    aspect-ratio: 1.65;
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--soft);
+  }
+  .news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s;
+  }
+  .news-image:hover img {
+    transform: scale(1.04);
+  }
+  .demo-badge {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: white;
+    background: var(--navy);
+    font-size: 0.63rem;
+    font-weight: 600;
+  }
+  .news-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: start;
+    padding-top: 22px;
+  }
+  .news-body h3 {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    line-height: 1.45;
+    text-transform: uppercase;
+  }
+  .news-body h3 a:hover {
+    color: var(--blue);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .news-meta {
+    margin-block: 16px;
+  }
+  .news-meta p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+    margin-top: 6px;
+  }
+  .news-meta svg {
+    color: var(--blue);
+  }
+  .news-excerpt {
+    font-size: 0.85rem;
+    line-height: 1.75;
+    margin-bottom: 22px;
+  }
+  .news-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    min-height: 44px;
+    padding: 10px 24px;
+    margin-top: auto;
+    color: white;
+    background: var(--navy);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 650;
+    transition: background 0.2s;
+  }
+  .news-more:hover {
+    background: var(--blue);
+  }
+  @media (max-width: 1099px) {
+    .news-grid {
+      gap: 25px;
+    }
+    .news-body h3 {
+      font-size: 1rem;
+    }
+  }
+  @media (max-width: 767px) {
+    .news-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .news-body h3 {
+      font-size: 1.2rem;
+    }
+    .news-image {
+      aspect-ratio: 1.75;
+    }
+  }
+</style>

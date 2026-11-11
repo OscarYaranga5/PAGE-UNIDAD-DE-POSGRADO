@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import ProgramExplorer from '../../components/ProgramExplorer.astro';
+import CallToAction from '../../components/CallToAction.astro';
+---
+<BaseLayout title="Programas de posgrado">
+  <PageIntro eyebrow="Programas" title="Encuentra tu próximo desafío." description="Maestrías y doctorado para profundizar en tu especialidad, explorar nuevas ideas y seguir creciendo." />
+  <section class="section"><div class="container"><ProgramExplorer /><aside class="editorial-note"><strong>Una decisión bien informada.</strong><p>Las duraciones y modalidades corresponden a las fichas institucionales consultadas. Confirma con admisión los detalles de la convocatoria vigente antes de postular.</p></aside></div></section>
+  <CallToAction />
+</BaseLayout>

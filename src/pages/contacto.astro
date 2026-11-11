@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+import { programs } from '../data/programs';
+---
+<BaseLayout title="Contacto">
+  <PageIntro eyebrow="Contacto" title="Las grandes decisiones empiezan conversando." description="Cuéntanos qué te gustaría estudiar. El equipo de posgrado puede orientarte sobre programas y admisión." />
+  <section class="section"><div class="container contact-grid"><div><span class="eyebrow">ESTAMOS CERCA</span><h2>Hablemos de<br />tu siguiente paso.</h2><div class="contact-methods"><a href={`mailto:${site.email}`}><Icon name="mail" size={24} /><span><small>ESCRÍBENOS</small><strong>{site.email}</strong></span><Icon name="diagonal" /></a><a href={site.phoneHref}><Icon name="phone" size={24} /><span><small>LLÁMANOS</small><strong>{site.phone}</strong></span><Icon name="diagonal" /></a><div><Icon name="pin" size={24} /><span><small>VISÍTANOS</small><strong>{site.address}</strong><span>{site.city}</span></span></div></div><p class="content-note">Datos publicados en el <a href={site.official}>portal institucional de posgrado</a>. Confirma el horario de atención antes de tu visita.</p></div><div class="contact-form-card"><span class="eyebrow">PREPARA TU CONSULTA</span><h2>Un paso más cerca.</h2><p>Completa los datos para preparar un correo. Tú revisas el mensaje y lo envías desde tu aplicación de correo.</p><form id="contact-form" data-email={site.email}><div class="form-field"><label for="name">Tu nombre</label><input id="name" name="name" autocomplete="name" maxlength="100" placeholder="¿Cómo te llamas?" required /></div><div class="form-field"><label for="program">Programa de interés</label><select id="program" name="program"><option value="">Me gustaría recibir orientación</option>{programs.map((program) => <option value={program.slug}>{program.type} en {program.title}</option>)}</select></div><div class="form-field"><label for="message">¿En qué podemos ayudarte?</label><textarea id="message" name="message" rows="4" maxlength="2000" placeholder="Cuéntanos qué información necesitas…" required></textarea></div><p class="form-privacy">Los datos se usan únicamente para preparar el correo en tu dispositivo. Esta página no los almacena ni los envía automáticamente.</p><button class="button" type="submit" id="prepare-email" disabled>Preparar correo <Icon /></button><noscript><p>Activa JavaScript para preparar el mensaje o escribe directamente a <a href={`mailto:${site.email}`}>{site.email}</a>.</p></noscript><div class="email-result" id="email-result" hidden><p role="status">Tu mensaje está preparado. Abre tu aplicación de correo para revisarlo y enviarlo.</p><a id="email-link" class="text-link" href={`mailto:${site.email}`}>Abrir aplicación de correo <Icon name="diagonal" /></a><small>Si no tienes una aplicación configurada, escribe a {site.email} desde tu servicio habitual.</small></div></form></div></div></section>
+</BaseLayout>
+<script>
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+  const programSelect = document.querySelector<HTMLSelectElement>('#program');
+  const selectedProgram = new URLSearchParams(window.location.search).get('programa');
+  // Solo acepta valores existentes: el parámetro de URL nunca se inserta como HTML.
+  if (programSelect && selectedProgram && Array.from(programSelect.options).some((option) => option.value === selectedProgram)) {
+    programSelect.value = selectedProgram;
+  }
+  const submit = document.querySelector<HTMLButtonElement>('#prepare-email');
+  if (submit) submit.disabled = false;
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    const data = new FormData(form);
+    const name = String(data.get('name') ?? '').trim();
+    const message = String(data.get('message') ?? '').trim();
+    const program = programSelect?.selectedOptions[0]?.textContent ?? 'Orientación';
+    const body = `Hola, equipo de Posgrado UNDC.\n\nMi nombre es ${name}.\nPrograma: ${program}\n\n${message}\n\nSaludos,\n${name}`;
+    const link = document.querySelector<HTMLAnchorElement>('#email-link');
+    const result = document.querySelector<HTMLElement>('#email-result');
+    if (link && result) {
+      link.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(`Consulta de posgrado: ${program}`)}&body=${encodeURIComponent(body)}`;
+      result.hidden = false;
+      link.focus();
+    }
+  });
+  // Impide abrir un borrador desactualizado después de cambiar los campos.
+  form?.addEventListener('input', () => {
+    const result = document.querySelector<HTMLElement>('#email-result');
+    if (result) result.hidden = true;
+  });
+</script>

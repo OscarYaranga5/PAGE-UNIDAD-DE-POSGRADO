@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import CallToAction from '../components/CallToAction.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+const resources = [
+  {
+    title: 'Aula virtual',
+    text: 'Accede al entorno virtual de posgrado con tu cuenta institucional.',
+    href: site.classroom,
+    icon: 'book' as const,
+  },
+  {
+    title: 'Portal universitario',
+    text: 'Consulta los servicios disponibles en el portal de la universidad.',
+    href: 'https://portal.undc.edu.pe/',
+    icon: 'globe' as const,
+  },
+  {
+    title: 'Mesa de partes',
+    text: 'Visita el canal institucional para la presentación y gestión de documentos.',
+    href: 'https://tramite.undc.edu.pe/',
+    icon: 'mail' as const,
+  },
+];
+---
+
+<BaseLayout
+  title="Comunidad académica"
+  description="Accede a los recursos y canales institucionales de la comunidad de Posgrado UNDC."
+>
+  <PageIntro
+    eyebrow="Comunidad académica"
+    title="Conecta con tu comunidad."
+    description="Encuentra los accesos institucionales que acompañan tu experiencia como estudiante de posgrado."
+  />
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">RECURSOS PARA TU ETAPA ACADÉMICA</span>
+          <h2>
+            Tus espacios,
+            <br />
+            en un solo lugar.
+          </h2>
+        </div>
+        <p>
+          Cada acceso te lleva a una plataforma oficial. Algunas requieren tus
+          credenciales institucionales.
+        </p>
+      </div>
+      <div class="values-grid">
+        {resources.map((resource) => (
+          <article>
+            <Icon name={resource.icon} size={32} />
+            <h3>{resource.title}</h3>
+            <p>{resource.text}</p>
+            <a class="text-link community-link" href={resource.href}>
+              Ir a {resource.title.toLowerCase()} <Icon name="diagonal" />
+            </a>
+          </article>
+        ))}
+      </div>
+      <aside class="editorial-note">
+        <strong>Mantente al día.</strong>
+        <p>
+          Las noticias, los resultados y los comunicados académicos se publican
+          en el portal oficial de posgrado. Consulta allí las novedades de tu
+          programa.
+        </p>
+        <a class="text-link" href={site.official}>
+          Ver portal oficial <Icon name="diagonal" />
+        </a>
+      </aside>
+    </div>
+  </section>
+  <CallToAction />
+</BaseLayout>
+<style>
+  .community-link {
+    margin-top: 25px;
+  }
+</style>

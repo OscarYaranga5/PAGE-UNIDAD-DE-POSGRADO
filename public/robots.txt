@@ -1,0 +1,3 @@
+# Prototipo local: habilitar indexación una vez aprobado el contenido.
+User-agent: *
+Disallow: /

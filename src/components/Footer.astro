@@ -1,0 +1,14 @@
+---
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+---
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-intro"><Brand light /><p>Conocimiento que inspira.<br />Profesionales que transforman.</p><span class="footer-location">Cañete, Perú <Icon name="globe" size={16} /></span></div>
+    <div><h2>Descubre</h2><a href="/programas/">Nuestros programas</a><a href="/nosotros/">Unidad de Posgrado</a><a href="/admision/">Admisión</a><a href="/contacto/">Contacto</a></div>
+    <div><h2>Comunidad</h2><a href={site.classroom}>Aula virtual <Icon name="diagonal" size={13} /></a><a href="https://portal.undc.edu.pe/">Portal universitario <Icon name="diagonal" size={13} /></a><a href="https://tramite.undc.edu.pe/">Mesa de partes <Icon name="diagonal" size={13} /></a><a href={site.official}>Portal oficial de posgrado <Icon name="diagonal" size={13} /></a></div>
+    <div><h2>Conversemos</h2><a href={`mailto:${site.email}`}>{site.email}</a><a href={site.phoneHref}>{site.phone}</a><p>{site.address}<br />{site.city}</p></div>
+  </div>
+  <div class="container footer-bottom"><span>© {new Date().getFullYear()} UNDC · Unidad de Posgrado</span><span>Propuesta de diseño · Fotografías referenciales</span></div>
+</footer>

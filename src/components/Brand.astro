@@ -1,0 +1,9 @@
+---
+interface Props { light?: boolean }
+const { light = false } = Astro.props;
+---
+<!-- Identificador tipográfico provisional: no representa un escudo oficial. -->
+<a href="/" class:list={['brand', { 'brand--light': light }]} aria-label="Unidad de Posgrado UNDC, inicio">
+  <span class="brand-monogram" aria-hidden="true">U<span>.</span></span>
+  <span class="brand-copy"><strong>UNDC<span>POSGRADO</span></strong><small>Universidad Nacional de Cañete</small></span>
+</a>

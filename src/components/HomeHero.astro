@@ -1,0 +1,384 @@
+---
+import Icon from './Icon.astro';
+import { programs } from '../data/programs';
+
+// Los indicadores salen del catálogo; evitar cifras institucionales de muestra.
+const highlights = [
+  {
+    icon: 'book' as const,
+    title: `${programs.filter((program) => program.type === 'Maestría').length} maestrías`,
+    detail: 'Para seguir creciendo',
+  },
+  {
+    icon: 'spark' as const,
+    title: `${programs.filter((program) => program.type === 'Doctorado').length} doctorado`,
+    detail: 'Una nueva perspectiva',
+  },
+  {
+    icon: 'globe' as const,
+    title: 'Cañete, Perú',
+    detail: 'Conocimiento que conecta',
+  },
+  {
+    icon: 'check' as const,
+    title: 'Formación presencial',
+    detail: 'Aprende y comparte',
+  },
+];
+---
+
+<section class="admissions-hero" aria-labelledby="hero-title">
+  <div class="hero-scene">
+    <img
+      class="scene-photo"
+      src="/images/comunidad.webp"
+      alt="Profesionales compartiendo ideas en un espacio de estudio; fotografía referencial"
+      width="1600"
+      height="1067"
+      fetchpriority="high"
+    />
+    <div class="scene-overlay" aria-hidden="true"></div>
+    <div class="container scene-content">
+      <div class="scene-copy">
+        <p class="scene-kicker">
+          APRENDE <span>·</span> CRECE <span>·</span> TRANSFORMA TU FUTURO
+        </p>
+        <h1 id="hero-title">
+          Prepárate para
+          <br />
+          liderar lo que
+          <br />
+          <em>sigue.</em>
+        </h1>
+        <p class="scene-description">
+          Tu experiencia merece un nuevo horizonte. Conecta el conocimiento con
+          tu propósito y transforma tu siguiente etapa profesional.
+        </p>
+        <div class="scene-actions">
+          <a href="#programas" class="button">
+            Encuentra tu programa <Icon />
+          </a>
+          <a href="/nosotros/" class="scene-secondary">
+            <Icon name="book" size={19} /> Conoce Posgrado UNDC
+          </a>
+        </div>
+      </div>
+      <div class="scene-signature" aria-hidden="true">
+        Tu propósito.
+        <br />
+        Tu futuro.
+        <br />
+        <strong>Tu siguiente paso.</strong>
+      </div>
+      <span class="scene-reference">Imagen referencial</span>
+    </div>
+  </div>
+  <!-- La banda permanece en el flujo y se superpone con margen negativo.
+       Así crece con el contenido en móvil sin tapar botones ni otras secciones. -->
+  <div class="container hero-highlights">
+    <ul aria-label="Posgrado UNDC en un vistazo">
+      {highlights.map((item) => (
+        <li>
+          <span class="highlight-icon">
+            <Icon name={item.icon} size={25} />
+          </span>
+          <div>
+            <strong>{item.title}</strong>
+            <span>{item.detail}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Estilos encapsulados: se reutilizan los colores existentes sin alterar
+     la cabecera, las tarjetas ni las demás páginas. */
+  .admissions-hero {
+    background: var(--white);
+    padding-bottom: 28px;
+  }
+  .hero-scene {
+    position: relative;
+    isolation: isolate;
+    background: var(--navy);
+    color: var(--white);
+  }
+  .scene-photo {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 45%;
+  }
+  .scene-overlay {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(16, 35, 74, 0.98) 0%,
+        rgba(16, 35, 74, 0.91) 30%,
+        rgba(16, 35, 74, 0.48) 57%,
+        rgba(16, 35, 74, 0.06) 100%
+      ),
+      linear-gradient(0deg, rgba(16, 35, 74, 0.65), transparent 40%);
+  }
+  .scene-content {
+    position: relative;
+    min-height: 650px;
+    display: flex;
+    align-items: center;
+    padding-block: 70px 110px;
+  }
+  .scene-copy {
+    max-width: 620px;
+  }
+  .scene-kicker {
+    color: #d8e1f3;
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    margin-bottom: 26px;
+  }
+  .scene-kicker span {
+    color: #9bbaff;
+    margin-inline: 8px;
+  }
+  .scene-copy h1 {
+    color: var(--white);
+    font-size: clamp(3.5rem, 5.2vw, 5rem);
+    line-height: 1.07;
+    letter-spacing: -0.055em;
+    font-weight: 750;
+  }
+  .scene-copy h1 em {
+    display: inline-block;
+    color: #9bbaff;
+    font-weight: 550;
+    letter-spacing: -0.06em;
+  }
+  .scene-description {
+    max-width: 440px;
+    color: #e1e8f5;
+    margin-top: 25px;
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+  .scene-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  .scene-actions .button {
+    padding-inline: 20px;
+    font-size: 0.8rem;
+    gap: 14px;
+  }
+  .scene-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 15px 18px;
+    border: 1px solid #ffffff80;
+    border-radius: 6px;
+    color: white;
+    background: #10234a55;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+  .scene-secondary:hover {
+    background: var(--navy);
+    border-color: white;
+  }
+  .scene-actions a:focus-visible {
+    outline-color: white;
+  }
+  .scene-signature {
+    position: absolute;
+    right: 15px;
+    bottom: 125px;
+    transform: rotate(-6deg);
+    color: white;
+    font-family: var(--display);
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-style: italic;
+    line-height: 1.4;
+    letter-spacing: -0.04em;
+    text-shadow: 0 2px 14px #10234a;
+  }
+  .scene-signature strong {
+    font-weight: 700;
+  }
+  .scene-reference {
+    position: absolute;
+    right: 0;
+    bottom: 65px;
+    color: white;
+    background: #10234a80;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 0.57rem;
+  }
+  .hero-highlights {
+    position: relative;
+    z-index: 1;
+    margin-top: -43px;
+  }
+  .hero-highlights ul {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 27px 20px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 12px 35px #10234a0c;
+  }
+  .hero-highlights li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-inline: 22px;
+  }
+  .hero-highlights li + li {
+    border-left: 1px solid var(--line);
+  }
+  .highlight-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    color: var(--blue);
+    background: var(--soft);
+  }
+  .hero-highlights strong {
+    display: block;
+    color: var(--navy);
+    font-family: var(--display);
+    font-size: 0.88rem;
+    font-weight: 750;
+    line-height: 1.4;
+  }
+  .hero-highlights li div > span {
+    display: block;
+    color: var(--muted);
+    margin-top: 5px;
+    font-size: 0.65rem;
+    line-height: 1.5;
+  }
+  @media (max-width: 1099px) {
+    .scene-signature {
+      display: none;
+    }
+    .hero-highlights ul {
+      padding-inline: 10px;
+    }
+    .hero-highlights li {
+      padding-inline: 12px;
+      gap: 10px;
+    }
+    .highlight-icon {
+      width: 34px;
+      height: 38px;
+    }
+    .hero-highlights strong {
+      font-size: 0.77rem;
+    }
+  }
+  @media (max-width: 767px) {
+    .scene-content {
+      min-height: 615px;
+      padding-block: 55px 100px;
+    }
+    .scene-photo {
+      object-position: 65% center;
+    }
+    .scene-overlay {
+      background:
+        linear-gradient(90deg, rgba(16, 35, 74, 0.94), rgba(16, 35, 74, 0.65)),
+        linear-gradient(0deg, rgba(16, 35, 74, 0.55), transparent);
+    }
+    .scene-copy {
+      max-width: 520px;
+    }
+    .scene-copy h1 {
+      font-size: clamp(2.8rem, 9.8vw, 4.3rem);
+    }
+    .scene-kicker {
+      font-size: 0.56rem;
+      letter-spacing: 0.09em;
+      line-height: 1.8;
+      margin-bottom: 23px;
+    }
+    .scene-kicker span {
+      margin-inline: 3px;
+    }
+    .scene-description {
+      font-size: 0.9rem;
+      max-width: 390px;
+    }
+    .scene-actions {
+      gap: 12px;
+    }
+    .scene-actions .button,
+    .scene-secondary {
+      font-size: 0.75rem;
+      min-height: 50px;
+    }
+    .scene-reference {
+      bottom: 56px;
+    }
+    .hero-highlights ul {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      padding: 10px;
+    }
+    .hero-highlights li {
+      padding: 18px 10px;
+    }
+    .hero-highlights li:nth-child(3) {
+      border-left: none;
+    }
+    .hero-highlights li:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+    .hero-highlights li div > span {
+      font-size: 0.6rem;
+    }
+  }
+  @media (max-width: 389px) {
+    .scene-actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
+    .hero-highlights li {
+      gap: 8px;
+      padding-inline: 6px;
+    }
+    .highlight-icon {
+      width: 26px;
+      background: none;
+    }
+    .highlight-icon :global(svg) {
+      width: 22px;
+    }
+    .hero-highlights strong {
+      font-size: 0.7rem;
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import NewsCards from '../../components/NewsCards.astro';
+import { news } from '../../data/news';
+---
+
+<BaseLayout
+  title="Noticias de posgrado"
+  description="Noticias, formación e investigación de la comunidad de Posgrado UNDC."
+>
+  <PageIntro
+    eyebrow="Noticias"
+    title="Conocimiento que se comparte."
+    description="Explora las publicaciones de nuestra comunidad de posgrado."
+  />
+  <section class="section">
+    <div class="container">
+      <NewsCards items={news} />
+    </div>
+  </section>
+</BaseLayout>

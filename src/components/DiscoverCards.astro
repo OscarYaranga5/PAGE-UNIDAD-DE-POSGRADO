@@ -1,0 +1,220 @@
+---
+import Icon from './Icon.astro';
+import { discoverCards } from '../data/discover';
+---
+
+<section
+  class="discover section"
+  aria-labelledby="discover-title"
+  id="descubre-posgrado"
+>
+  <div class="container">
+    <div class="discover-heading">
+      <span class="eyebrow">CONOCE TU PRÓXIMA ETAPA</span>
+      <h2 id="discover-title">
+        ¿Por qué estudiar en <span>Posgrado UNDC?</span>
+      </h2>
+    </div>
+    <ul class="discover-grid">
+      {discoverCards.map((card) => (
+        <li>
+          <!-- Un único enlace cubre toda la tarjeta. El CTA es visual, no un
+               botón anidado: así funciona también con teclado y sin JavaScript. -->
+          <a class="discover-card" href={card.href}>
+            <div class="discover-image">
+              <img
+                src={card.image}
+                alt=""
+                width="900"
+                height="750"
+                loading="lazy"
+                decoding="async"
+                style={{ objectPosition: card.position }}
+              />
+            </div>
+            <div class="discover-body">
+              <h3>{card.title}</h3>
+              <span class="discover-cta">
+                Conoce más aquí <Icon name="diagonal" size={16} />
+              </span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .discover {
+    background: var(--soft);
+  }
+  .discover-heading {
+    text-align: center;
+    max-width: 850px;
+    margin: 0 auto 45px;
+  }
+  .discover-heading h2 {
+    color: var(--blue);
+    font-size: clamp(1.9rem, 3.1vw, 2.7rem);
+  }
+  .discover-heading h2 span {
+    display: inline-block;
+  }
+  .discover-heading h2::after {
+    content: '';
+    display: block;
+    width: 68px;
+    height: 3px;
+    background: var(--blue);
+    margin: 22px auto;
+  }
+  .discover-heading p {
+    font-size: 0.9rem;
+  }
+  .discover-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .discover-grid li {
+    min-width: 0;
+  }
+  .discover-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 24px;
+    background: var(--navy);
+    color: white;
+    transition:
+      transform 0.25s,
+      box-shadow 0.25s;
+  }
+  .discover-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 35px #10234a20;
+  }
+  .discover-card:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 6px;
+  }
+  .discover-image {
+    aspect-ratio: 1 / 1.05;
+    overflow: hidden;
+  }
+  .discover-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .discover-card:hover img {
+    transform: scale(1.05);
+  }
+  .discover-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    gap: 22px;
+    padding: 27px 15px 22px;
+    text-align: center;
+  }
+  .discover-body h3 {
+    max-width: 220px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .discover-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 14px;
+    min-height: 44px;
+    border-radius: 100px;
+    background: white;
+    color: var(--navy);
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .discover-card:hover .discover-cta,
+  .discover-card:focus-visible .discover-cta {
+    background: var(--blue);
+    color: white;
+  }
+  /* Se reduce el número de columnas en lugar de recortar tarjetas o exigir
+     desplazamiento horizontal para descubrir los enlaces. */
+  @media (max-width: 1199px) {
+    .discover-grid {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .discover-grid li {
+      grid-column: span 2;
+    }
+    .discover-grid li:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+    .discover-grid li:nth-child(5) {
+      grid-column: 4 / span 2;
+    }
+    .discover-image {
+      aspect-ratio: 1.25;
+    }
+  }
+  @media (max-width: 767px) {
+    .discover-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .discover-grid li,
+    .discover-grid li:nth-child(4),
+    .discover-grid li:nth-child(5) {
+      grid-column: auto;
+    }
+    .discover-grid li:last-child {
+      grid-column: 1 / -1;
+      width: calc((100% - 18px) / 2);
+      justify-self: center;
+    }
+    .discover-body {
+      padding: 24px 12px 20px;
+    }
+    .discover-body h3 {
+      font-size: 0.85rem;
+    }
+  }
+  @media (max-width: 479px) {
+    .discover-grid {
+      grid-template-columns: 1fr;
+      max-width: 340px;
+      margin-inline: auto;
+      gap: 24px;
+    }
+    .discover-grid li:last-child {
+      grid-column: auto;
+      width: 100%;
+    }
+    .discover-image {
+      aspect-ratio: 1.45;
+    }
+    .discover-body h3 {
+      font-size: 1rem;
+    }
+    .discover-cta {
+      font-size: 0.8rem;
+    }
+  }
+</style>

@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import Icon from '../components/Icon.astro';
+import Faq from '../components/Faq.astro';
+import CallToAction from '../components/CallToAction.astro';
+import { admissionSteps, site } from '../data/site';
+---
+<BaseLayout title="Admisión">
+  <PageIntro eyebrow="Admisión" title="Dale dirección a lo que viene." description="Conoce la ruta para postular y encuentra la orientación que necesitas para tomar una decisión informada." />
+  <section class="section"><div class="container admission-grid"><div><span class="eyebrow">EL CAMINO EMPIEZA AQUÍ</span><h2>De tu próxima meta<br />al primer paso.</h2><ol class="steps-list">{admissionSteps.map((step, index) => <li><span>0{index + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}</ol></div><aside class="adviser-card"><span class="eyebrow">ADMISIÓN POSGRADO</span><h2>Tu postulación, en el portal oficial.</h2><p>Consulta primero la convocatoria vigente. La inscripción se realiza directamente en la plataforma institucional.</p><a class="button" href={site.registration} target="_blank" rel="noopener noreferrer">Ir al portal de inscripción <Icon name="diagonal" /><span class="sr-only"> (abre en otra pestaña)</span></a><a class="text-link" href="/contacto/">Necesito orientación <Icon /></a><small>Esta guía es orientativa. El prospecto vigente determina las etapas, los documentos y las condiciones de admisión.</small></aside></div></section>
+  <section class="section section--soft"><div class="container faq-grid"><div><span class="eyebrow">PREGUNTAS FRECUENTES</span><h2>Empieza<br />con claridad.</h2></div><Faq /></div></section>
+  <CallToAction />
+</BaseLayout>

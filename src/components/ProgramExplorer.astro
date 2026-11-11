@@ -1,0 +1,55 @@
+---
+import { programs, programCategories } from '../data/programs';
+import ProgramCard from './ProgramCard.astro';
+const filters = [
+  { type: 'all', label: 'Todos los programas', count: programs.length },
+  ...programCategories.map((category) => ({
+    ...category,
+    count: programs.filter((program) => program.type === category.type).length,
+  })),
+];
+---
+<div class="program-explorer" data-explorer>
+  <div class="filter-bar" hidden data-filters>
+    <div class="filter-buttons" role="group" aria-label="Filtrar programas por categoría">
+      {filters.map((filter) => (
+        <button type="button" class:list={['filter-button', { 'is-active': filter.type === 'all' }]} data-filter={filter.type} aria-pressed={filter.type === 'all'}>
+          {filter.label} <span>{String(filter.count).padStart(2, '0')}</span>
+        </button>
+      ))}
+    </div>
+    <span class="filter-note">Un nuevo capítulo profesional</span>
+  </div>
+  <p class="sr-only" role="status" aria-live="polite" data-filter-status></p>
+  <div class="program-grid">{programs.map((program, index) => <ProgramCard program={program} index={index} />)}</div>
+  <!-- No se inventa oferta académica para categorías que aún no tienen fichas. -->
+  <div class="program-empty" data-filter-empty hidden>
+    <h3>Aún no hay programas publicados en esta categoría.</h3>
+    <p>Consulta con el equipo de posgrado para recibir más información.</p>
+    <a href="/contacto/" class="text-link">Solicitar información</a>
+  </div>
+</div>
+<script>
+  // Mejora progresiva: sin JavaScript se muestran todos los programas.
+  document.querySelectorAll<HTMLElement>('[data-explorer]').forEach((explorer) => {
+    const filters = explorer.querySelector<HTMLElement>('[data-filters]');
+    if (filters) filters.hidden = false;
+    const buttons = explorer.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = explorer.querySelectorAll<HTMLElement>('[data-program]');
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      let visible = 0;
+      buttons.forEach((item) => {
+        item.setAttribute('aria-pressed', String(item === button));
+        item.classList.toggle('is-active', item === button);
+      });
+      cards.forEach((card) => {
+        card.hidden = button.dataset.filter !== 'all' && card.dataset.type !== button.dataset.filter;
+        if (!card.hidden) visible++;
+      });
+      const status = explorer.querySelector('[data-filter-status]');
+      const empty = explorer.querySelector<HTMLElement>('[data-filter-empty]');
+      if (empty) empty.hidden = visible !== 0;
+      if (status) status.textContent = `${visible} ${visible === 1 ? 'programa disponible' : 'programas disponibles'}`;
+    }));
+  });
+</script>

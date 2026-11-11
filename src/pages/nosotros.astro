@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import CallToAction from '../components/CallToAction.astro';
+import Icon from '../components/Icon.astro';
+---
+<BaseLayout title="Nuestra unidad">
+  <PageIntro eyebrow="Nosotros" title="El conocimiento abre caminos." description="Una mirada al posgrado como espacio para aprender, investigar y aportar nuevas perspectivas a nuestro entorno." />
+  <section class="section"><div class="container about-grid"><div><span class="eyebrow">POSGRADO UNDC</span><h2>Desde Cañete.<br /><span class="blue-text">Con la mirada<br />en el futuro.</span></h2><p class="large-copy">La formación de posgrado es una oportunidad para cuestionar lo que sabemos, profundizar en nuestra especialidad y construir nuevas respuestas.</p><p>La Universidad Nacional de Cañete cuenta con programas de maestría y doctorado que articulan la formación especializada con la investigación.</p><a class="text-link" href="/programas/">Explora nuestros programas <Icon /></a></div><figure class="about-photo"><img src="/images/comunidad.webp" width="1600" height="1067" alt="Profesionales colaborando en un espacio de trabajo" loading="lazy" /><figcaption>Imagen referencial de trabajo colaborativo.</figcaption></figure></div></section>
+  <section class="section section--soft"><div class="container"><div class="section-heading"><div><span class="eyebrow">UNA VISIÓN COMPARTIDA</span><h2>Tres ideas que<br />nos llevan más lejos.</h2></div></div><div class="values-grid"><article><Icon name="book" size={32} /><h3>Seguir aprendiendo</h3><p>Ampliar nuestras perspectivas a través de la formación avanzada y el intercambio de ideas.</p></article><article><Icon name="spark" size={32} /><h3>Hacer preguntas</h3><p>Acercarnos a los desafíos de nuestro entorno con curiosidad, método y pensamiento crítico.</p></article><article><Icon name="globe" size={32} /><h3>Generar aportes</h3><p>Conectar el conocimiento con las oportunidades de desarrollo de nuestra comunidad.</p></article></div><p class="content-note">Propuesta editorial del sitio. Consulta la misión, visión y organización aprobadas en el <a href="https://web.undc.edu.pe/escuela-de-posgrado-undc/">portal institucional de la UNDC</a>.</p></div></section>
+  <CallToAction />
+</BaseLayout>
