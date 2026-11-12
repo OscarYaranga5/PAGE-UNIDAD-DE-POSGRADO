@@ -4,14 +4,54 @@ import Icon from './Icon.astro';
 import { navigation, site } from '../data/site';
 const path = Astro.url.pathname;
 ---
-<div class="utility-bar"><div class="container utility-inner"><span>El conocimiento nos mueve. El futuro nos une.</span><a href={site.classroom} target="_blank" rel="noopener noreferrer">Aula virtual <Icon name="diagonal" size={13} /><span class="sr-only"> (abre en otra pestaña)</span></a></div></div>
-<header class="site-header">
+
+<div class="utility-bar">
+  <div class="container utility-inner">
+    <span>
+      Universidad Nacional de Cañete{' '}
+      <span class="utility-faculty">· Facultad de Ingeniería</span>
+    </span>
+    <a href={site.classroom} target="_blank" rel="noopener noreferrer">
+      Aula virtual <Icon name="diagonal" size={13} />
+      <span class="sr-only"> (abre en otra pestaña)</span>
+    </a>
+  </div>
+</div>
+<header class:list={['site-header', { 'site-header--over-hero': path === '/' }]}>
   <div class="container header-inner">
-    <Brand />
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Abrir menú"><span></span><span></span></button>
-    <nav id="main-navigation" class="main-nav" aria-label="Navegación principal">
-      {navigation.map(({ label, href }) => <a href={href} aria-current={(href === '/' ? path === '/' : path.startsWith(href)) ? 'page' : undefined}>{label}</a>)}
-      <a href="/contacto/" class="button button--small nav-cta">Solicita información <Icon size={16} /></a>
+    <div class="header-identity">
+      <Brand />
+    </div>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="main-navigation"
+      aria-label="Abrir menú"
+    >
+      <span></span>
+      <span></span>
+    </button>
+    <nav
+      id="main-navigation"
+      class="main-nav"
+      aria-label="Navegación principal"
+    >
+      {navigation.map(({ label, href }) => (
+        <a
+          href={href}
+          aria-current={
+            (href === '/' ? path === '/' : path.startsWith(href))
+              ? 'page'
+              : undefined
+          }
+        >
+          {label}
+        </a>
+      ))}
+      <a href="/contacto/" class="button button--small nav-cta">
+        Solicita información <Icon size={16} />
+      </a>
     </nav>
   </div>
 </header>
@@ -23,18 +63,26 @@ const path = Astro.url.pathname;
     toggle?.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
     nav?.classList.toggle('is-open', open);
   };
-  toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  toggle?.addEventListener('click', () =>
+    setOpen(toggle.getAttribute('aria-expanded') !== 'true'),
+  );
   nav?.addEventListener('click', (event) => {
-    if (event.target instanceof Element && event.target.closest('a')) setOpen(false);
+    if (event.target instanceof Element && event.target.closest('a'))
+      setOpen(false);
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+    if (
+      event.key === 'Escape' &&
+      toggle?.getAttribute('aria-expanded') === 'true'
+    ) {
       setOpen(false);
       toggle.focus();
     }
   });
   // El menú móvil deja de estar expandido al volver a escritorio.
-  matchMedia('(min-width: 1100px)').addEventListener('change', () => setOpen(false));
+  matchMedia('(min-width: 1100px)').addEventListener('change', () =>
+    setOpen(false),
+  );
   toggle?.classList.add('is-ready');
   nav?.classList.add('is-enhanced');
 </script>

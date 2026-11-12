@@ -1,9 +1,11 @@
 ---
+import { Image } from 'astro:assets';
+import logo from '../../public/images/logo-fi-upg.png';
 interface Props { light?: boolean }
 const { light = false } = Astro.props;
 ---
-<!-- Identificador tipográfico provisional: no representa un escudo oficial. -->
-<a href="/" class:list={['brand', { 'brand--light': light }]} aria-label="Unidad de Posgrado UNDC, inicio">
-  <span class="brand-monogram" aria-hidden="true">U<span>.</span></span>
-  <span class="brand-copy"><strong>UNDC<span>POSGRADO</span></strong><small>Universidad Nacional de Cañete</small></span>
+<!-- Una sola fuente para cabecera y pie. Se conserva transparencia y color;
+     Astro genera tamaños optimizados sin alterar el archivo original. -->
+<a href="/" class:list={['brand', { 'brand--light': light }]} aria-label="Unidad de Posgrado de la Facultad de Ingeniería, UNDC. Inicio">
+  <Image src={logo} alt="FI–UPG · Unidad de Posgrado de la Facultad de Ingeniería, Universidad Nacional de Cañete" width={240} height={80} widths={[180, 240, 360, 480]} sizes="(max-width: 767px) 180px, 240px" format="webp" class="brand-logo" loading={light ? 'lazy' : 'eager'} />
 </a>

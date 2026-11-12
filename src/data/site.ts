@@ -1,5 +1,5 @@
-// Fuente única para identidad y enlaces. Sustituir el isotipo tipográfico
-// por el logo aprobado en Brand.astro cuando la universidad lo proporcione.
+// Fuente única para identidad y enlaces. Brand.astro comparte el logo FI–UPG
+// proporcionado por el usuario entre la cabecera y el pie del sitio.
 export const site = {
   name: 'Unidad de Posgrado',
   university: 'Universidad Nacional de Cañete',

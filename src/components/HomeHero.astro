@@ -275,6 +275,10 @@ const highlights = [
       font-size: 0.77rem;
     }
   }
+  @media (min-width: 1100px) {
+    /* Espacio de seguridad para la cabecera translúcida superpuesta. */
+    .scene-content { padding-top: 170px; min-height: 720px; }
+  }
   @media (max-width: 767px) {
     /* En móvil la foto ocupa una cabecera propia: evita superponer el
        titular a los rostros y mantiene legibles los botones sin oscurecerla. */

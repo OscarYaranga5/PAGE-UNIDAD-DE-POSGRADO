@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import ProgramExplorer from '../components/ProgramExplorer.astro';
 import CallToAction from '../components/CallToAction.astro';
-import Faq from '../components/Faq.astro';
+import TestimonialsSection from '../components/TestimonialsSection.astro';
 import DiscoverCards from '../components/DiscoverCards.astro';
 import HomeHero from '../components/HomeHero.astro';
 import NewsSection from '../components/NewsSection.astro';
@@ -50,17 +50,6 @@ import EventsSection from '../components/EventsSection.astro';
 
   <NewsSection />
 
-  <section class="section">
-    <div class="container faq-grid">
-      <div>
-        <span class="eyebrow">RESOLVEMOS TUS DUDAS</span>
-        <SectionTitle primary="Antes de dar" secondary="el siguiente paso." />
-        <a href="/contacto/" class="text-link">
-          Habla con nosotros <Icon />
-        </a>
-      </div>
-      <Faq />
-    </div>
-  </section>
+  <TestimonialsSection />
   <CallToAction />
 </BaseLayout>

@@ -1,0 +1,296 @@
+---
+import SectionTitle from './SectionTitle.astro';
+import { testimonials } from '../data/testimonials';
+---
+
+<section
+  class="section testimonials-section"
+  id="testimonios"
+  aria-labelledby="testimonials-title"
+>
+  <div class="container">
+    <header class="testimonials-heading">
+      <div>
+        <span class="eyebrow">TESTIMONIOS DE PROFESIONALES</span>
+        <SectionTitle
+          id="testimonials-title"
+          primary="Trayectorias que inspiran."
+          secondary="Experiencias que conectan."
+        />
+      </div>
+      <p>
+        Un espacio para conocer las experiencias de nuestra comunidad
+        profesional y su camino en el posgrado.
+      </p>
+    </header>
+    <div class="testimonials-grid">
+      {testimonials.map((item, index) => (
+        <article
+          class="testimonial-card"
+          aria-labelledby={`testimonial-${item.id}`}
+        >
+          <div class="testimonial-top">
+            <span class="quote-symbol" aria-hidden="true">
+              “
+            </span>
+            <span class="testimonial-area">{item.area}</span>
+          </div>
+          {item.status === 'published' ? (
+            <>
+              <blockquote>
+                <p>{item.quote}</p>
+              </blockquote>
+              <div class="testimonial-person">
+                {item.image && (
+                  <img
+                    src={item.image}
+                    alt=""
+                    width="52"
+                    height="52"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div>
+                  <h3 id={`testimonial-${item.id}`}>{item.name}</h3>
+                  <p>{item.role}</p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div class="testimonial-pending">
+                <span class="pending-label">PRÓXIMAMENTE</span>
+                <h3 id={`testimonial-${item.id}`}>
+                  Una trayectoria.
+                  <br />
+                  Una nueva perspectiva.
+                </h3>
+                <p>
+                  Pronto compartiremos aquí una experiencia profesional en{' '}
+                  {item.area.toLocaleLowerCase('es-PE')}.
+                </p>
+              </div>
+              <div class="testimonial-person">
+                <span class="pending-avatar" aria-hidden="true">
+                  <svg
+                    width="25"
+                    height="25"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
+                    <circle cx="12" cy="8" r="3.5" />
+                    <path d="M5 21v-2a7 7 0 0 1 14 0v2" />
+                  </svg>
+                </span>
+                <div>
+                  <strong>Profesional por presentar</strong>
+                  <p>Testimonio pendiente de autorización</p>
+                </div>
+              </div>
+            </>
+          )}
+          <div class="testimonial-program">
+            <span>{item.program}</span>
+            <span aria-hidden="true">0{index + 1}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+    {testimonials.some((item) => item.status === 'pending') && (
+      <p class="testimonials-note">
+        Los espacios «Próximamente» se completarán con testimonios reales y
+        autorizados.
+      </p>
+    )}
+  </div>
+</section>
+
+<style>
+  .testimonials-section {
+    background: var(--soft);
+  }
+  .testimonials-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 42px;
+  }
+  .testimonials-heading > p {
+    max-width: 330px;
+    font-size: 0.9rem;
+  }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .testimonial-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--blue);
+    border-radius: 8px;
+    padding: 28px;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px #10234a0b;
+  }
+  .testimonial-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  .quote-symbol {
+    color: var(--blue);
+    font-family: Georgia, serif;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    height: 40px;
+  }
+  .testimonial-area {
+    color: var(--muted);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .testimonial-pending,
+  blockquote {
+    flex: 1;
+    margin: 0 0 28px;
+  }
+  .pending-label {
+    display: inline-block;
+    color: var(--blue);
+    background: #eef2ff;
+    border-radius: 4px;
+    padding: 4px 9px;
+    font-size: 0.56rem;
+    letter-spacing: 0.09em;
+    font-weight: 700;
+    margin-bottom: 17px;
+  }
+  .testimonial-pending h3 {
+    font-size: 1.35rem;
+    line-height: 1.35;
+    letter-spacing: -0.035em;
+  }
+  .testimonial-pending > p {
+    font-size: 0.82rem;
+    line-height: 1.8;
+    margin-top: 15px;
+  }
+  blockquote p {
+    font-family: var(--display);
+    color: var(--ink);
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+  .testimonial-person {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .pending-avatar,
+  .testimonial-person img {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .pending-avatar {
+    display: grid;
+    place-items: center;
+    background: var(--soft);
+    color: #7185ad;
+  }
+  .testimonial-person h3,
+  .testimonial-person strong {
+    display: block;
+    font-family: var(--body);
+    font-size: 0.78rem;
+    font-weight: 650;
+    letter-spacing: 0;
+    line-height: 1.5;
+  }
+  .testimonial-person p {
+    font-size: 0.66rem;
+    margin-top: 4px;
+    line-height: 1.6;
+  }
+  .testimonial-program {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    align-items: start;
+    margin-top: 22px;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+  .testimonial-program > span:last-child {
+    color: #8590a5;
+    font-family: var(--display);
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+  .testimonials-note {
+    text-align: center;
+    font-size: 0.7rem;
+    margin-top: 25px;
+  }
+  @media (max-width: 1099px) {
+    .testimonials-heading {
+      align-items: start;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .testimonials-heading > p {
+      max-width: 600px;
+    }
+    .testimonials-grid {
+      gap: 18px;
+    }
+    .testimonial-card {
+      padding: 22px;
+    }
+  }
+  @media (max-width: 767px) {
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .testimonial-card {
+      padding: 28px;
+    }
+    .testimonial-pending h3 {
+      font-size: 1.5rem;
+    }
+    .testimonials-heading {
+      margin-bottom: 30px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-card {
+      transition: none;
+    }
+    .testimonial-card:hover {
+      transform: none;
+    }
+  }
+</style>
