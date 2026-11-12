@@ -1,22 +1,10 @@
 ---
 import Brand from './Brand.astro';
 import Icon from './Icon.astro';
-import { navigation, site } from '../data/site';
+import { navigation } from '../data/site';
 const path = Astro.url.pathname;
 ---
 
-<div class="utility-bar">
-  <div class="container utility-inner">
-    <span>
-      Universidad Nacional de Cañete{' '}
-      <span class="utility-faculty">· Facultad de Ingeniería</span>
-    </span>
-    <a href={site.classroom} target="_blank" rel="noopener noreferrer">
-      Aula virtual <Icon name="diagonal" size={13} />
-      <span class="sr-only"> (abre en otra pestaña)</span>
-    </a>
-  </div>
-</div>
 <header class:list={['site-header', { 'site-header--over-hero': path === '/' }]}>
   <div class="container header-inner">
     <div class="header-identity">
@@ -49,7 +37,7 @@ const path = Astro.url.pathname;
           {label}
         </a>
       ))}
-      <a href="/contacto/" class="button button--small nav-cta">
+      <a href="/contacto/" class="nav-cta">
         Solicita información <Icon size={16} />
       </a>
     </nav>

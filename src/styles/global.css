@@ -57,15 +57,18 @@ svg { flex-shrink: 0; vertical-align: middle; }
 .utility-bar { background: #0b1935; color: #c4d1ea; font-size: .65rem; letter-spacing: .025em; }
 .utility-inner { min-height: 34px; display: flex; align-items: center; justify-content: space-between; }
 .utility-inner a { display: flex; align-items: center; gap: 9px; }
-/* Cristal flotante: el fallback casi opaco conserva la lectura sin backdrop-filter. */
-.site-header { position: sticky; top: 12px; z-index: 30; width: min(1320px, calc(100% - 40px)); margin: 12px auto; background: rgba(250,252,255,.96); color: var(--navy); border: 1px solid #ffffffb3; border-radius: 20px; box-shadow: 0 8px 32px #0b193512, inset 0 1px 0 #ffffffb3; }
+/* Cristal de borde a borde; el contenido conserva sus márgenes interiores. */
+.site-header { position: sticky; top: 0; z-index: 30; width: 100%; margin: 0; background: transparent; color: var(--navy); border: 0; border-radius: 0; }
+/* Una sola capa evita la unión visible entre el cristal y su difuminado.
+   La máscara afecta al fondo, nunca al logo, los textos o sus áreas clickeables. */
+.site-header::before { content: ''; position: absolute; inset: 0 0 -76px; pointer-events: none; background: rgba(250,252,255,.96); -webkit-mask-image: var(--header-fade); mask-image: var(--header-fade); --header-fade: linear-gradient(to bottom, #000 0, #000 calc(100% - 126px), rgba(0,0,0,.97) calc(100% - 110px), rgba(0,0,0,.86) calc(100% - 92px), rgba(0,0,0,.68) calc(100% - 74px), rgba(0,0,0,.46) calc(100% - 56px), rgba(0,0,0,.25) calc(100% - 38px), rgba(0,0,0,.08) calc(100% - 18px), transparent 100%); }
 @supports ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
-  .site-header { background: rgba(247,250,255,.79); -webkit-backdrop-filter: blur(20px) saturate(145%); backdrop-filter: blur(20px) saturate(145%); }
+  .site-header::before { background: linear-gradient(90deg, rgba(247,250,255,.10), rgba(247,250,255,.70) 65%); -webkit-backdrop-filter: blur(10px) saturate(110%); backdrop-filter: blur(10px) saturate(110%); }
 }
-.header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; width: calc(100% - 40px); min-height: 94px; padding-block: 8px; }
+.header-inner { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 24px; width: calc(100% - 40px); min-height: 94px; padding-block: 8px; }
 @media (min-width: 1100px) {
   /* Solo en inicio se superpone al hero; su contenido reserva el mismo espacio. */
-  .site-header--over-hero { margin-bottom: -108px; }
+  .site-header--over-hero { margin-bottom: -94px; }
 }
 /* Identidad original sin filtros: el logo y su descriptor forman una unidad. */
 .header-identity { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
@@ -75,11 +78,11 @@ svg { flex-shrink: 0; vertical-align: middle; }
 .brand { display: inline-flex; align-items: center; flex-shrink: 0; max-width: 100%; }
 .brand-logo { display: block; width: 240px; max-width: 100%; height: auto; object-fit: contain; }
 .main-nav { display: flex; align-items: center; gap: 9px; }
-.main-nav > a:not(.button) { font-family: var(--display); font-size: .78rem; font-weight: 550; padding: 10px 14px; color: #304366; border-radius: 100px; line-height: 1.5; position: relative; transition: color .25s, background .25s; }
-.main-nav > a[aria-current='page']:not(.button) { color: var(--blue); background: #ffffffb3; box-shadow: 0 2px 10px #10234a08; }
-.main-nav > a:not(.button):hover { color: var(--blue); background: #ffffff80; }
-.main-nav > .nav-cta { margin-left: 12px; min-height: 44px; padding: 12px 19px; font-family: var(--display); font-size: .73rem; font-weight: 650; background: var(--blue); border-color: transparent; color: white; border-radius: 100px; box-shadow: 0 4px 15px #143fe01a; }
-.main-nav > .nav-cta:hover { background: var(--blue-hover); border-color: transparent; color: white; transform: translateY(-1px); }
+.main-nav > a:not(.button) { font-family: var(--display); font-size: .82rem; font-weight: 650; padding: 10px 14px; color: #10234a; line-height: 1.5; position: relative; text-underline-offset: 6px; transition: color .25s; }
+.main-nav > a[aria-current='page']:not(.button) { color: #10234a; text-decoration: underline; text-decoration-thickness: 2px; }
+.main-nav > a:not(.button):hover { color: #143fe0; text-decoration: underline; }
+.main-nav > .nav-cta { display: inline-flex; align-items: center; gap: 10px; margin-left: 12px; }
+.main-nav > .nav-cta:not(.button) { color: #10234a; font-weight: 750; }
 .menu-toggle { display: none; }
 
 /* Portada editorial: imagen contenida y contraste alto para mantener legibilidad. */
@@ -323,7 +326,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   .utility-inner > span { font-size: .53rem; }
   .utility-inner > a { font-size: .58rem; }
   .brand-logo { width: 180px; }
-  .site-header { top: 8px; width: calc(100% - 24px); margin-block: 8px; border-radius: 16px; }
   .header-identity .brand-logo { width: 160px; }
   .header-brand-label { font-size: .5rem; letter-spacing: .16em; }
   .utility-faculty { display: none; }
